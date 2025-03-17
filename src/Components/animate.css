@@ -43,6 +43,44 @@
     }
   }
   
+  /* Adjusting for smaller screens */
+  @media (max-width: 768px) {
+    @keyframes scaleUp {
+      0% {
+        transform: scale(2);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(5);
+        opacity: 1;
+      }
+    }
+  }
+  
+  /* Adjusting for very small screens (mobile) */
+  @media (max-width: 480px) {
+    @keyframes scaleUp {
+      0% {
+        transform: scale(1.5);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(4);
+        opacity: 1;
+      }
+    }
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   /* Keyframes for the moving light spot effect */
   @keyframes moveLight {
     0% {
