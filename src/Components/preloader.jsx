@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Preloader.css"; // Import CSS for styling
+import "./animate.css"; // Import CSS for styling
 import logo from "../assets/logo1-removebg-preview (2).png"; // ✅ Make sure this is in `src` folder
  
  
