@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/logo1.jpg";
 import LoginModal from "./LoginModal";
 import SignUpModal from "./SignUpModal";
@@ -12,6 +12,7 @@ const Navbar = () => {
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation(); // Get current route
 
   // Load authentication state from localStorage on component mount
   useEffect(() => {
@@ -33,6 +34,9 @@ const Navbar = () => {
     navigate("/");
   };
 
+  // Function to check if a route is active
+  const isActive = (path) => location.pathname === path;
+
   return (
     <>
       <nav className="sticky top-0 z-50 bg-[#F9FAFC] shadow-lg">
@@ -43,19 +47,33 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
-            <Link to="/sigma-course" className="bg-[#6674CC] text-white px-4 py-2 rounded-lg">
+            <Link
+              to="/sigma-course"
+              className={`px-4 py-2 rounded-lg ${
+                isActive("/sigma-course") ? "bg-blue-700 text-white" : "bg-[#6674CC] text-white"
+              }`}
+            >
               New Sigma 5.0
             </Link>
-            <Link to="/dsa-sheet" className="font-semibold">
+            <Link
+              to="/dsa-sheet"
+              className={`font-semibold ${isActive("/dsa-sheet") ? "text-blue-700 underline" : ""}`}
+            >
               Whiteboard
             </Link>
-            <Link to="/new-courses" className="font-semibold">
+            <Link
+              to="/new-courses"
+              className={`font-semibold ${isActive("/new-courses") ? "text-blue-700 underline" : ""}`}
+            >
               New Courses
             </Link>
 
             {isAuthenticated ? (
               <>
-                <Link to="/Courses" className="font-semibold text-blue-600">
+                <Link
+                  to="/Courses"
+                  className={`font-semibold ${isActive("/Courses") ? "text-blue-700 underline" : "text-blue-600"}`}
+                >
                   My Batch
                 </Link>
                 <button className="font-semibold text-red-600" onClick={handleLogout}>
@@ -64,10 +82,18 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <button className="font-semibold text-blue-600" onClick={() => setIsLoginModalOpen(true)}>
+                <button
+                  className={`font-semibold ${isActive("/login") ? "text-blue-700 underline" : "text-blue-600"}`}
+                  onClick={() => setIsLoginModalOpen(true)}
+                >
                   Login
                 </button>
-                <button className="border border-blue-600 px-4 py-2 rounded-lg text-blue-600" onClick={() => setIsSignUpModalOpen(true)}>
+                <button
+                  className={`border border-blue-600 px-4 py-2 rounded-lg ${
+                    isActive("/signup") ? "bg-blue-600 text-white" : "text-blue-600"
+                  }`}
+                  onClick={() => setIsSignUpModalOpen(true)}
+                >
                   Sign Up
                 </button>
               </>
@@ -83,19 +109,37 @@ const Navbar = () => {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden flex flex-col items-center space-y-4 py-4 bg-gray-100">
-            <Link to="/sigma-course" className="bg-[#6674CC] text-white px-4 py-2 rounded-lg" onClick={() => setIsMenuOpen(false)}>
+            <Link
+              to="/sigma-course"
+              className={`px-4 py-2 rounded-lg ${
+                isActive("/sigma-course") ? "bg-blue-700 text-white" : "bg-[#6674CC] text-white"
+              }`}
+              onClick={() => setIsMenuOpen(false)}
+            >
               New Sigma 5.0
             </Link>
-            <Link to="/dsa-sheet" className="font-semibold text-gray-700" onClick={() => setIsMenuOpen(false)}>
+            <Link
+              to="/dsa-sheet"
+              className={`font-semibold ${isActive("/dsa-sheet") ? "text-blue-700 underline" : ""}`}
+              onClick={() => setIsMenuOpen(false)}
+            >
               Whiteboard
             </Link>
-            <Link to="/new-courses" className="font-semibold text-gray-700" onClick={() => setIsMenuOpen(false)}>
+            <Link
+              to="/new-courses"
+              className={`font-semibold ${isActive("/new-courses") ? "text-blue-700 underline" : ""}`}
+              onClick={() => setIsMenuOpen(false)}
+            >
               New Courses
             </Link>
 
             {isAuthenticated ? (
               <>
-                <Link to="/Courses" className="font-semibold text-blue-600" onClick={() => setIsMenuOpen(false)}>
+                <Link
+                  to="/Courses"
+                  className={`font-semibold ${isActive("/Courses") ? "text-blue-700 underline" : "text-blue-600"}`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   My Batch
                 </Link>
                 <button className="font-semibold text-red-600" onClick={handleLogout}>
@@ -104,10 +148,18 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <button className="font-semibold text-blue-600" onClick={() => setIsLoginModalOpen(true)}>
+                <button
+                  className={`font-semibold ${isActive("/login") ? "text-blue-700 underline" : "text-blue-600"}`}
+                  onClick={() => setIsLoginModalOpen(true)}
+                >
                   Login
                 </button>
-                <button className="border border-blue-600 px-4 py-2 rounded-lg text-blue-600" onClick={() => setIsSignUpModalOpen(true)}>
+                <button
+                  className={`border border-blue-600 px-4 py-2 rounded-lg ${
+                    isActive("/signup") ? "bg-blue-600 text-white" : "text-blue-600"
+                  }`}
+                  onClick={() => setIsSignUpModalOpen(true)}
+                >
                   Sign Up
                 </button>
               </>
@@ -117,17 +169,13 @@ const Navbar = () => {
       </nav>
 
       {/* Modals */}
-       <LoginModal 
-    openModal={isLoginModalOpen} 
-    setOpenModal={setIsLoginModalOpen} 
-    setIsSignUpModalOpen={setIsSignUpModalOpen}  // ✅ Pass this prop
-  
- setIsAuthenticated={handleLogin} />
-      <SignUpModal 
-          openModal={isSignUpModalOpen} 
-          setOpenModal={setIsSignUpModalOpen} 
-          setIsLoginModalOpen={setIsLoginModalOpen}  // ✅ Pass this prop
-        />
+      <LoginModal
+        openModal={isLoginModalOpen}
+        setOpenModal={setIsLoginModalOpen}
+        setIsSignUpModalOpen={setIsSignUpModalOpen}
+        setIsAuthenticated={handleLogin}
+      />
+      <SignUpModal openModal={isSignUpModalOpen} setOpenModal={setIsSignUpModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />
     </>
   );
 };

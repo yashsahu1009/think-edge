@@ -1,4 +1,5 @@
- import React from "react";
+import React from "react";
+import { motion } from "framer-motion";
 
 const students = [
   {
@@ -53,12 +54,14 @@ const students = [
 
 const StudentCard = ({ student }) => {
   return (
-    <div className="bg-gradient-to-r from-purple-500 to-blue-400 rounded-2xl p-4 shadow-lg w-72 text-white">
+    <div className="bg-gradient-to-r from-purple-500 to-blue-400 rounded-2xl p-4 shadow-lg w-full text-white">
       <div className="flex flex-col items-center">
         {/* Student Image */}
         <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white">
-          <img src={student.image} alt={student.name} className="w-full h-full object-cover" />
-        </div>
+  <img src={student.image} alt={student.name} className="w-full h-full object-cover" />
+</div>
+        
+        
 
         {/* Company & Role */}
         <h3 className="bg-gray-800 rounded-full px-4 py-1 mt-3 text-sm font-semibold">
@@ -66,7 +69,7 @@ const StudentCard = ({ student }) => {
         </h3>
 
         {/* Student Info */}
-        <div className="bg-white text-black p-2 rounded-lg mt-3 w-full text-sm">
+        <div className="bg-white text-black p-2 rounded-lg mt-3 w-72 text-sm">
           <p><strong>Name:</strong> {student.name}</p>
           <p><strong>Branch:</strong> {student.branch}</p>
           <p><strong>Degree:</strong> {student.degree}</p>
@@ -83,12 +86,24 @@ const StudentCard = ({ student }) => {
 
 const SelectedStudents = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center py-10 px-6">
+    <div className=" flex flex-col items-center py-10 px-6">
       <h2 className="text-2xl font-bold mb-6">Our Selected Students</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        {students.map((student) => (
-          <StudentCard key={student.id} student={student} />
-        ))}
+      
+      <div className="overflow-hidden w-full relative">
+        <motion.div
+          className="flex space-x-6"
+          initial={{ x: "0%" }}
+          animate={{ x: "-100%" }}
+          transition={{
+            repeat: Infinity,
+            ease: "linear",
+            duration: 10,
+          }}
+        >
+          {[...students, ...students].map((student, index) => (
+            <StudentCard key={index} student={student} />
+          ))}
+        </motion.div>
       </div>
     </div>
   );

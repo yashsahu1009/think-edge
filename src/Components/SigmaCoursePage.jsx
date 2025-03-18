@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import left from "../assets/banner_top_image.png";
+import { motion } from "framer-motion";
  
 const CourseCard = ({ title, color, features, duration, startDate }) => (
   
@@ -128,25 +129,137 @@ const CompaniesSection = () => {
     // Add other companies here...
   ];
 
+   
+   
   return (
-    <section className="companies py-16 text-center bg-gray-100">
+    <section className="py-16 text-center bg-gray-100">
       <h2 className="font-semibold text-4xl">
         Thousands of students achieved their{" "}
         <span className="text-indigo-600">dream job at</span>
       </h2>
-      <div className="flex flex-wrap justify-center items-center mt-8">
-        {companies.map((company, index) => (
+      
+   
+      <div className="overflow-hidden w-full relative mt-8">
+  <motion.div
+    className="flex space-x-6"
+    animate={{ x: ["0%", "-100%"] }} // Moves from right to left in a loop
+    transition={{
+      repeat: Infinity,
+      ease: "linear",
+      duration: 10,
+    }}
+  >
+    {[...companies, ...companies].map((company, index) => (
+      <div
+        key={index}
+        className="w-56 h-40 bg-white shadow-lg rounded-2xl flex flex-col justify-center items-center p-4 border border-gray-200"
+      >
+        <div className="w-40 h-24 flex justify-center items-center">
           <img
-            key={index}
             src={company.src}
             alt={company.alt}
-            className="w-40 h-auto mx-4 my-4"
+            className="max-w-full max-h-full object-contain"
           />
-        ))}
+        </div>
+        <h3 className="mt-2 text-lg font-semibold text-gray-700">{company.alt}</h3>
       </div>
+    ))}
+  </motion.div>
+</div>
+
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
     </section>
   );
 };
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+ 
+   
+   
+   
+   
+   
+   
+   
+   
+   
+
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+
+
+
+   
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
 const App = () => {
   const navigate = useNavigate();
