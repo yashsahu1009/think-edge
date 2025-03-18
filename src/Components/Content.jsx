@@ -66,46 +66,80 @@ const Content = () => {
               <span className="text-yellow-400">Ultimate</span> Placement Solution &raquo;
             </button>
           </div>
-          <div className="md:w-5/12">
+          <div className="md:w-5/12  ">
             <img
               src={right}
               alt="Smiling person coding"
-              className="max-w-[500px] h-auto rounded-full" // Max width of 500px, height auto
+              className="max-w-[450px] h-auto responsive-image  rounded-full" // Max width of 500px, height auto
             />
           </div>
         </div>
       </div>
 
       {/* Stats Section */}
-      <div className="stats-section relative bg-gradient-to-br from-indigo-500 to-indigo-400 text-white py-16">
-        <div className="absolute inset-0 bg-gradient-to-tl from-indigo-400 to-indigo-500 transform skew-y-12 z-0"></div>
-        <div className="relative z-10 text-center">
-          <h5 className="text-4xl font-bold">
-            INDIA'S MOST LOVED CODING COMMUNITY ❤️
-          </h5>
-          <div className="flex justify-around space-x-12 mt-8">
-            <div className="text-center">
-              <p className="text-3xl">&#128101;</p>
-              <h3 className="count text-3xl" data-target="6000000">
-                0
-              </h3>
-              <p>Happy Learners</p>
-            </div>
-            <div className="text-center">
-              <p className="text-3xl">&#128065;</p>
-              <h3 className="text-3xl">2 Crore+</h3>
-              <p>Monthly Views</p>
-            </div>
-            <div className="text-center">
-              <p className="text-3xl">&#128279;</p>
-              <h3 className="count text-3xl" data-target="100000">
-                0
-              </h3>
-              <p>New Monthly Subscribers</p>
-            </div>
-          </div>
-        </div>
+      <div className="stats-section relative bg-gradient-to-br from-indigo-500 to-indigo-400 text-white py-16 px-4">
+  <div className="absolute inset-0 bg-gradient-to-tl from-indigo-400 to-indigo-500 transform skew-y-12 z-0"></div>
+  
+  <div className="relative z-10 text-center">
+    <h5 className="text-2xl sm:text-3xl md:text-4xl font-bold">
+      INDIA'S MOST LOVED CODING COMMUNITY ❤️
+    </h5>
+
+    {/* Responsive Grid for Stats */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
+      <div className="text-center">
+        <p className="text-4xl">&#128101;</p>
+        <h3 className="count text-3xl font-semibold" data-target="6000000">
+          0
+        </h3>
+        <p className="text-lg">Happy Learners</p>
       </div>
+
+      <div className="text-center">
+        <p className="text-4xl">&#128065;</p>
+        <h3 className="text-3xl font-semibold">2 Crore+</h3>
+        <p className="text-lg">Monthly Views</p>
+      </div>
+
+      <div className="text-center">
+        <p className="text-4xl">&#128279;</p>
+        <h3 className="count text-3xl font-semibold" data-target="100000">
+          0
+        </h3>
+        <p className="text-lg">New Monthly Subscribers</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
 
       {/* Placement Section */}
       <section className="placement bg-white text-center py-16 px-4">

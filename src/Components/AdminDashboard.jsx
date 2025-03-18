@@ -151,7 +151,10 @@ const AdminDashboard = () => {
       <div className="flex justify-between items-center p-5   bg-[#6674CC] text-white">
         <div className="flex items-center">
           <img src={logo} alt="Admin Logo" className="w-12 h-12 rounded-full mr-3" />
-          <h1 className="text-4xl font-semibold text-black">Admin Dashboard</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-black  md:text-left">
+  Admin Dashboard
+</h1>
+
         </div>
         <div className="flex items-center space-x-4">
           <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-full bg-gray-800 hover:bg-gray-700">
@@ -162,10 +165,14 @@ const AdminDashboard = () => {
           </button>
         </div>
       </div>
-      <h1 className="flex items-center mt-9 justify-center text-5xl font-bold">
-  <span>Welcome To The </span>
-  <span className="  animate-bounce"  style={{ color: " #BA8458" }}    >Thinkedge</span>
+      <h1 className="flex flex-wrap items-center justify-center mt-6 text-3xl sm:text-4xl md:text-5xl font-bold text-center">
+  <span>Welcome To The&nbsp;</span>
+  <span className="animate-bounce" style={{ color: "#BA8458" }}>ThinkEdge</span>
 </h1>
+
+  
+  
+
 
       {/* ✅ Search Bar */}
       <div className="p-6 flex justify-center">
