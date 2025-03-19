@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 const LoginModal = ({ openModal, setOpenModal, setIsSignUpModalOpen, setIsAuthenticated }) => {
   const [email, setEmail] = useState("");
+  const[usename,setUsername]=useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [forgotEmail, setForgotEmail] = useState(""); // ✅ State for forgot password email
@@ -41,6 +42,7 @@ const LoginModal = ({ openModal, setOpenModal, setIsSignUpModalOpen, setIsAuthen
 
       if (response.ok && data.role === "ROLE_USER") {
         localStorage.setItem("authToken", data.jwtToken);
+        localStorage.setItem("email",data.username);
         setIsAuthenticated(true);
         handleClose();
         navigate("/");

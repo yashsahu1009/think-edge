@@ -55,7 +55,7 @@ function App() {
             <Route path="/dsa-sheet" element={<Dsasheet />} />
             <Route path="/new-courses" element={<NewCourses setIsLoginModalOpen={setIsLoginModalOpen}/>} />
             <Route path="/payment" element={<PaymentPage />} />
-            <Route path="/courses" element={<Dashboard />} />
+            <Route path="/courses" element={<> <Dashboard /> <Footer /> </>} />
             <Route path="/playlist" element={<Playlist />} />
       
             <Route path="/admin" element={<AdminDashboard />} />

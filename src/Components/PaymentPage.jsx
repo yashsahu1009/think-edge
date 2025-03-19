@@ -1,28 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import companyLogo from "../assets/logo1.jpg";
 import paymentBanner from "../assets/large1.jpg";
+import { useNavigate } from "react-router-dom";
 
 function PaymentPage() {
   const [formData, setFormData] = useState({
     email: "",
-    phone: "",
-    fullName: "",
-    amount: "99", // Default amount
-    coupon: "" // Coupon code field
+    mobile: "",
+    name: "",
   });
 
-  const [errors, setErrors] = useState({
-    email: "",
-    phone: "",
-    fullName: "",
-    coupon: ""
-  });
+  const [errors, setErrors] = useState({});
+  const [courseId, setCourseId] = useState(null);
+  const [amount, setAmount] = useState(null);
+  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
 
-  // Valid Coupons & Discounts (Key: Coupon Code, Value: Discount Amount)
-  const validCoupons = {
-    "SAVE50": 50,  // ₹50 off
-    "DISCOUNT10": 10, // ₹10 off
-  };
+  useEffect(() => {
+    const storedCourseId = localStorage.getItem("selectedCourseId");
+    const storedAmount = localStorage.getItem("selectedCourseAmount");
+    if (storedCourseId) setCourseId(storedCourseId);
+    if (storedAmount) setAmount(storedAmount);
+  }, []);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -34,62 +33,89 @@ function PaymentPage() {
     if (!formData.email.includes("@")) {
       formErrors.email = "Please enter a valid email address.";
     }
-    if (formData.phone.length < 10) {
-      formErrors.phone = "Phone number must be at least 10 digits.";
+    if (!/^\d{10}$/.test(formData.mobile)) {
+      formErrors.mobile = "Phone number must be exactly 10 digits.";
     }
-    if (formData.fullName.trim() === "") {
-      formErrors.fullName = "Full name is required.";
+    if (formData.name.trim() === "") {
+      formErrors.name = "Full name is required.";
     }
+
     setErrors(formErrors);
     return Object.keys(formErrors).length === 0;
   };
 
-  const handlePayment = () => {
-    if (!validateForm()) return;
-
-    let finalAmount = parseInt(formData.amount); // Convert amount to integer
-
-    // Apply discount if a valid coupon is entered
-    if (formData.coupon in validCoupons) {
-      finalAmount -= validCoupons[formData.coupon]; // Reduce amount
-      if (finalAmount < 0) finalAmount = 0; // Prevent negative prices
-    }
-
-    if (!window.Razorpay) {
-      const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      script.async = true;
-      script.onload = () => initiatePayment(finalAmount);
-      script.onerror = () => alert("Failed to load Razorpay. Please try again.");
-      document.body.appendChild(script);
-    } else {
-      initiatePayment(finalAmount);
-    }
+  const loadRazorpay = async () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+      } else {
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.body.appendChild(script);
+      }
+    });
   };
 
-  const initiatePayment = (finalAmount) => {
+  const handlePayment = async () => {
+    if (!validateForm()) return;
+
+    const razorpayLoaded = await loadRazorpay();
+    if (!razorpayLoaded) {
+      alert("Failed to load Razorpay. Please try again.");
+      return;
+    }
+
     const options = {
-      key: "rzp_test_IN0eM3HBLCrQub", // Replace with your Razorpay Key
-      amount: finalAmount * 100, // Convert to paise
+      key: "rzp_test_IN0eM3HBLCrQub",
+      amount: amount * 100,
       currency: "INR",
       name: "ThinkEdge",
-      description: "Sigma 5.0 | Complete Placement Prep",
+      description: "Course Payment",
       image: companyLogo,
       prefill: {
-        name: formData.fullName,
+        name: formData.name,
         email: formData.email,
-        contact: formData.phone,
+        contact: formData.mobile,
       },
-      theme: {
-        color: "#0d2366",
-      },
-      handler: function (response) {
-        alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
+      theme: { color: "#0d2366" },
+      handler: async (response) => {
+        console.log("Payment Success:", response);
+
+        const transactionData = {
+          email: formData.email,
+          mobile: formData.mobile,
+          name: formData.name,
+          amount: amount,
+          courseId: courseId,
+        };
+
+        const token = localStorage.getItem("authToken");
+
+        try {
+          const res = await fetch("http://192.168.29.223:8081/api/createTranscation", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(transactionData),
+          });
+
+          const data = await res.json();
+          if (res.ok) {
+            setShowModal(true);
+          } else {
+            alert(`Transaction failed: ${data.message}`);
+          }
+        } catch (error) {
+          console.error("Error recording transaction:", error);
+          alert("Payment successful, but failed to record transaction.");
+        }
       },
       modal: {
-        ondismiss: function () {
-          alert("Payment was cancelled.");
-        },
+        ondismiss: () => alert("Payment was cancelled."),
       },
     };
 
@@ -100,6 +126,7 @@ function PaymentPage() {
   return (
     <div className="container mx-auto py-10">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        {/* Course Details Section */}
         <div className="col-span-2">
           <div className="space-y-5">
             <img src={companyLogo} alt="Company Logo" className="w-48 mb-3" />
@@ -107,42 +134,38 @@ function PaymentPage() {
               Sigma 5.0 | Complete Placement Prep
             </h1>
             <img src={paymentBanner} alt="Sigma 5.0 Banner" className="w-96 mb-4 border-2 border-white" />
-            <img src="https://cdn.razorpay.com/static/assets/pay_methods_branding.png" alt="Feature 1" className="w-96 mb-4" />
-            <img src="https://razorpay.com/assets/razorpay-logo.svg" alt="Feature 2" className="w-96 mb-4" />
             <p className="font-bold">
               <strong>Sigma Oct'24 Batch</strong> | Data Structures & Algorithms + Web Development
             </p>
+            <h5 className="text-[#0d2366] text-lg font-semibold mt-4">With this course, you will get:</h5>
+            <ul className="list-disc ml-6 space-y-2">
+              <li>Complete Java Language</li>
+              <li>Complete Data Structures & Algorithms</li>
+              <li>Live practice doubt classes for DSA</li>
+              <li>Library of DSA Qs with Video Solutions of Top Companies</li>
+              <li>Complete Frontend Development (HTML, CSS, JavaScript & frameworks like Bootstrap & Tailwind)</li>
+              <li>Complete Backend Development (Node.js, Express.js)</li>
+            </ul>
           </div>
         </div>
+
+        {/* Payment Form Section */}
         <div className="container mx-auto">
           <div className="grid gap-10">
             <div className="col-span-1 bg-gray-100 p-5 rounded-lg shadow-lg">
               <h5 className="text-[#0d2366] text-lg font-semibold">Payment Details</h5>
               <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
                 <div>
-                  <label htmlFor="amount" className="block text-sm font-semibold">Select Amount</label>
-                  <select
-                    id="amount"
-                    value={formData.amount}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-lg mt-2"
-                  >
-                    <option value="99">₹99</option>
-                    <option value="199">₹199</option>
-                    <option value="299">₹299</option>
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="coupon" className="block text-sm font-semibold">Coupon Code</label>
+                  <label className="block text-sm font-semibold">Amount</label>
                   <input
                     type="text"
-                    id="coupon"
-                    value={formData.coupon}
-                    onChange={handleChange}
-                    placeholder="Enter coupon code (if any)"
+                    value={`₹${amount || "0"}`}
+                    readOnly
                     className="w-full p-3 border border-gray-300 rounded-lg mt-2"
                   />
+                  <small className="text-gray-500">18% GST included, paid to the Government</small>
                 </div>
+
                 <div>
                   <label htmlFor="email" className="block text-sm font-semibold">Email</label>
                   <input
@@ -153,35 +176,37 @@ function PaymentPage() {
                     placeholder="Enter your email"
                     className="w-full p-3 border border-gray-300 rounded-lg mt-2"
                   />
+                  {errors.email && <small className="text-red-500">{errors.email}</small>}
                 </div>
+
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-semibold">Phone</label>
+                  <label htmlFor="mobile" className="block text-sm font-semibold">Phone</label>
                   <input
                     type="text"
-                    id="phone"
-                    value={formData.phone}
+                    id="mobile"
+                    value={formData.mobile}
                     onChange={handleChange}
                     placeholder="Enter your phone"
                     className="w-full p-3 border border-gray-300 rounded-lg mt-2"
                   />
+                  {errors.mobile && <small className="text-red-500">{errors.mobile}</small>}
                 </div>
+
                 <div>
-                  <label htmlFor="fullName" className="block text-sm font-semibold">Full Name</label>
+                  <label htmlFor="name" className="block text-sm font-semibold">Full Name</label>
                   <input
                     type="text"
-                    id="fullName"
-                    value={formData.fullName}
+                    id="name"
+                    value={formData.name}
                     onChange={handleChange}
                     placeholder="Enter your full name"
                     className="w-full p-3 border border-gray-300 rounded-lg mt-2"
                   />
+                  {errors.name && <small className="text-red-500">{errors.name}</small>}
                 </div>
-                <button
-                  type="button"
-                  onClick={handlePayment}
-                  className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                >
-                  Pay ₹{formData.amount - (validCoupons[formData.coupon] || 0)}
+
+                <button onClick={handlePayment} className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                  Pay ₹{amount || "0"}
                 </button>
               </form>
             </div>

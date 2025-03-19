@@ -31,6 +31,8 @@ const Navbar = () => {
     setIsAuthenticated(false);
     localStorage.removeItem("isAuthenticated"); // Remove auth state
     localStorage.removeItem("authToken"); // Remove auth token
+    localStorage.removeItem("email");
+    localStorage.removeItem("user");
     navigate("/");
   };
 

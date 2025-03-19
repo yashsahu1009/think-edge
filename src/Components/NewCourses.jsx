@@ -6,7 +6,7 @@ import loadingGif from "../assets/loading.gif";
 const CourseList = () => {
   const [courses, setCourses] = useState([]);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [loading, setLoading] = useState(true); // Added loading state
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,39 +34,33 @@ const CourseList = () => {
       } catch (error) {
         console.error("Error fetching courses:", error);
       } finally {
-        setLoading(false); // Stop loading once request is complete
+        setLoading(false);
       }
     };
 
     fetchCourses();
   }, []);
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-  const handleEnroll = (courseId) => {
+
+  const handleEnroll = (courseId, amount) => {
     const token = localStorage.getItem("authToken");
+
     if (!token) {
       setIsLoginModalOpen(true);
       return;
     }
-  
-    // Navigate to the payment page with course ID
+
+    // Store the course ID and amount in localStorage
+    localStorage.setItem("selectedCourseId", courseId);
+    localStorage.setItem("selectedCourseAmount", amount);
+
+    // Navigate to the payment page
     navigate(`/payment`);
   };
-  
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-purple-200 flex flex-col items-center py-10">
       <h1 className="text-4xl font-extrabold text-gray-800 mb-8">Explore Our Courses</h1>
 
-      {/* Show loading gif when fetching data */}
       {loading ? (
         <div className="flex justify-center items-center h-96">
           <img src={loadingGif} alt="Loading..." className="w-32 h-32" />
@@ -89,10 +83,10 @@ const CourseList = () => {
 
               <h3 className="text-xl font-bold text-gray-900 mt-4">{course.title}</h3>
               <p className="text-gray-600 text-sm mt-2 leading-relaxed flex-grow">{course.description}</p>
-              <p className="text-blue-600 font-semibold text-lg mt-2">{course.price}</p>
+              <p className="text-blue-600 font-semibold text-lg mt-2">₹{course.price}</p>
 
               <button
-                onClick={() => handleEnroll(course.id)}
+                onClick={() => handleEnroll(course.courseId, course.price)}
                 className="mt-auto w-full bg-blue-600 text-white py-2 rounded-lg font-semibold shadow-md transition-all hover:bg-blue-700 hover:shadow-lg active:scale-95"
               >
                 Enroll Now
