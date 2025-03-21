@@ -5,11 +5,12 @@ import { useNavigate } from "react-router-dom";
 import logo from "../assets/favicon-3.png";
 import loadingGif from "../assets/loading.gif";
 
-const API_BASE_URL = "http://192.168.29.223:8081/api/admin/AllCourse";
-const ADD_COURSE_URL = "http://192.168.29.223:8081/api/admin/addcourse";
-const DELETE_COURSE_URL = "http://192.168.29.223:8081/api/admin/removeCourse";
-const EDIT_COURSE_URL = "http://192.168.29.223:8081/api/admin/updateCourseWithoutimage";
-const VIDEO_COURSE_URL = "http://192.168.29.223:8081/api/addVideo";
+
+const API_BASE_URL = "http://192.168.246.11:8081/api/admin/AllCourse";
+const ADD_COURSE_URL = "http://192.168.246.11:8081/api/admin/addcourse";
+const DELETE_COURSE_URL = "http://192.168.246.11:8081/api/admin/removeCourse";
+const EDIT_COURSE_URL = "http://192.168.246.11:8081/api/admin/updateCourseWithoutimage";
+const VIDEO_COURSE_URL = "http://192.168.246.11:8081/api/addVideo";
 
 const AdminDashboard = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -257,9 +258,9 @@ const AdminDashboard = () => {
                       style={{ width: "500px", height: "200px", borderRadius: "8px", marginTop: "10px" }}
                     />
                   )}
-                  <h5 className="text-lg font-semibold ">{course.courseId}</h5>
-                  <h4 className="text-lg font-semibold">{course.title}</h4>
-                  <p className="text-sm">{course.description}</p>
+                  <h5 className="text-lg font-semibold text-slate-900">{course.courseId}</h5>
+                  <h2 className="text-xl font-semibold text-">{course.title}</h2>
+                  <p className="text-sm text-lime-200">{course.description}</p>
                   <p className="text-lg font-bold mt-1">${course.price}</p>
                   <button onClick={() => deleteCourse(course.courseId)} className="mt-2 bg-red-600 text-white px-4 py-2 rounded-lg ">Delete</button>
                   <button onClick={() => {

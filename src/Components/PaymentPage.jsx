@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import companyLogo from "../assets/logo1.jpg";
 import paymentBanner from "../assets/large1.jpg";
 import { useNavigate } from "react-router-dom";
+import load from "../assets/successful-animated-icon-download-in-lottie-json-gif-static-svg-file-formats--complete-done-success-tick-pulsing-circle-status-pack-user-interface-icons-8403662-vmake-vmake (online-video-cutter.com).mp4"
 
 function PaymentPage() {
   const [formData, setFormData] = useState({
@@ -94,7 +95,7 @@ function PaymentPage() {
         const token = localStorage.getItem("authToken");
 
         try {
-          const res = await fetch("http://192.168.29.223:8081/api/createTranscation", {
+          const res = await fetch("http://192.168.246.11:8081/api/createTranscation", {
             method: "POST",
             headers: {
               Authorization: `Bearer ${token}`,
@@ -213,6 +214,27 @@ function PaymentPage() {
           </div>
         </div>
       </div>
+      {showModal && (
+   <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+     <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+       <video autoPlay loop className="w-32 mx-auto">
+         <source src={load} type="video/mp4" />
+       </video>
+       <h2 className="text-lg font-semibold mt-4">Payment Successful!</h2>
+       <p>Thank you for your payment. Your transaction has been recorded.</p>
+       <button 
+         onClick={() => navigate("/")} 
+         className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+       >
+         Go to Dashboard
+       </button>
+     </div>
+   </div>
+ )}
+
+
+  
+
     </div>
   );
 }
