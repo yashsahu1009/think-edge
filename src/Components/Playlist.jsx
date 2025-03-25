@@ -6,13 +6,23 @@ const CoursePage = () => {
   const [videos, setVideos] = useState([]);
   const [currentLessonIndex, setCurrentLessonIndex] = useState(null);
   const [videoUrl, setVideoUrl] = useState("");
+  const [filteredVideos, setFilteredVideos] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef(null);
+  const [volume, setVolume] = useState(1);
+  const [isMuted, setIsMuted] = useState(false);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const courseIdFromUrl = queryParams.get("courseId");
-  const [courseId, setCourseId] = useState(courseIdFromUrl || localStorage.getItem("courseId"));
+  const [courseId, setCourseId] = useState(
+    courseIdFromUrl || localStorage.getItem("courseId")
+  );
   const token = localStorage.getItem("authToken");
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     if (!courseId) {
@@ -29,7 +39,7 @@ const CoursePage = () => {
         }
 
         const response = await fetch(
-          `http://192.168.246.11:8081/api/showVideo?courseId=${courseId}`,
+          `http://192.168.29.223:8081/api/showVideo?courseId=${courseId}`,
           {
             method: "GET",
             headers: {
@@ -56,48 +66,235 @@ const CoursePage = () => {
   const handleVideoSelect = (video, index) => {
     setVideoUrl(video.video_url);
     setCurrentLessonIndex(index);
+    setProgress(0);
+    setIsPlaying(true);
+
+    setTimeout(() => {
+      if (videoRef.current) {
+        videoRef.current.load();
+        videoRef.current.play();
+      }
+    }, 100);
+  };
+  const toggleFullscreen = () => {
+    if (videoRef.current) {
+      if (!document.fullscreenElement) {
+        videoRef.current.requestFullscreen();
+        setIsFullscreen(true);
+      } else {
+        document.exitFullscreen();
+        setIsFullscreen(false);
+      }
+    }
   };
 
-  useEffect(() => {
-    if (videoRef.current && videoUrl) {
-      videoRef.current.load();
-      videoRef.current.play().catch((err) => console.error("Auto-play blocked:", err));
+  const handleTimeUpdate = () => {
+    if (videoRef.current) {
+      const newProgress =
+        (videoRef.current.currentTime / videoRef.current.duration) * 100;
+      setProgress(newProgress);
     }
-  }, [videoUrl]);
+  };
+
+  const handleProgressClick = (e) => {
+    if (videoRef.current) {
+      const progressBar = e.currentTarget;
+      const clickX = e.nativeEvent.offsetX;
+      const progressBarWidth = progressBar.clientWidth;
+      const newTime = (clickX / progressBarWidth) * videoRef.current.duration;
+      videoRef.current.currentTime = newTime;
+    }
+  };
+
+  const handleSkip = (seconds) => {
+    if (videoRef.current) {
+      videoRef.current.currentTime += seconds;
+    }
+  };
+
+  const handleSpeedChange = (speed) => {
+    setPlaybackSpeed(speed);
+    if (videoRef.current) {
+      videoRef.current.playbackRate = speed;
+    }
+  };
+
+  const togglePlayPause = () => {
+    if (videoRef.current) {
+      if (videoRef.current.paused) {
+        videoRef.current.play();
+        setIsPlaying(true);
+      } else {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      }
+    }
+  };
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+    }
+  };
+
+  const handleVolumeChange = (e) => {
+    const newVolume = e.target.value;
+    setVolume(newVolume);
+    setIsMuted(newVolume == 0);
+    if (videoRef.current) {
+      videoRef.current.volume = newVolume;
+    }
+  }; // Fixed missing closing brace
+
+  const handleNext = () => {
+    if (currentLessonIndex < videos.length - 1) {
+      handleVideoSelect(videos[currentLessonIndex + 1], currentLessonIndex + 1);
+    }
+  };
+  useEffect(() => {
+    const filtered = videos.filter((video) =>
+      video.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredVideos(filtered);
+  }, [searchTerm, videos]);
+
+  const handlePrev = () => {
+    if (currentLessonIndex > 0) {
+      handleVideoSelect(videos[currentLessonIndex - 1], currentLessonIndex - 1);
+    }
+  };
 
   return (
-    <div className="flex h-screen">
-      <div className="w-1/3 bg-gray-100 p-4 overflow-y-auto">
-        <h2 className="text-lg font-semibold mb-2">Course Videos</h2>
-        <h3 className="text-md font-medium mb-2">Course ID: {courseId}</h3>
-        {loading ? <p>Loading videos...</p> : (
+    <div className="flex h-[760px] overflow-y-auto scrollbar-hide">
+      {/* Sidebar */}
+      <div className="w-1/4 bg-gray-900 text-white p-4 overflow-y-auto scrollbar-hide">
+        <h2 className="text-lg font-bold mb-4">Course Videos</h2>
+        <input
+          type="text"
+          placeholder="Search videos..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full p-2 mb-4 text-black rounded-lg"
+        />
+        {loading ? (
+          <p>Loading videos...</p>
+        ) : (
           <ul className="space-y-4">
-            {videos.map((video, index) => (
+            {filteredVideos.map((video, index) => (
               <li
                 key={index}
-                className={`flex items-center gap-4 cursor-pointer p-2 rounded-lg ${
-                  currentLessonIndex === index ? "bg-blue-200" : "hover:bg-gray-200"
+                className={`p-2 rounded-lg cursor-pointer transition hover:bg-gray-700 ${
+                  currentLessonIndex === index ? "bg-blue-600" : ""
                 }`}
                 onClick={() => handleVideoSelect(video, index)}
               >
-                <div className="w-6 h-6 flex items-center justify-center bg-blue-500 text-white rounded-full">
-                  <i className="fas fa-play text-xs"></i>
-                </div>
-                <div>
-                  <p className="text-sm font-medium">{video.title}</p>
-                </div>
+                {video.title}
               </li>
             ))}
           </ul>
         )}
       </div>
 
-      <div className="w-2/3 bg-black flex items-center justify-center">
+      {/* Video Player Section */}
+      <div className="w-3/4 bg-black flex flex-col items-center justify-center relative p-4 overflow-hidden">
         {videoUrl ? (
-          <video ref={videoRef} width="100%" height="80%" controls autoPlay>
-            <source src={videoUrl} type="video/mp4" />
-          </video>
-        ) : <p className="text-white">Select a video to start watching.</p>}
+          <div className="w-full max-w-6xl relative">
+            <video
+              ref={videoRef}
+              width="100%"
+              onTimeUpdate={handleTimeUpdate}
+              autoPlay
+              playsInline
+              controlsList="nodownload nofullscreen noremoteplayback"
+              onContextMenu={(e) => e.preventDefault()}
+            >
+              <source src={videoUrl} type="video/mp4" />
+            </video>
+
+            {/* Clickable Video Progress Bar */}
+            <div
+              className="w-full bg-gray-700 h-2 rounded-full mt-2 cursor-pointer"
+              onClick={handleProgressClick}
+            >
+              <div
+                className="bg-blue-400 h-2 rounded-full transition-all"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+
+            {/* Controls */}
+            <div className="flex justify-between items-center mt-4 text-white">
+              <div className="flex items-center ">
+                <button onClick={toggleMute} className="text-white">
+                  {isMuted ? "🔇" : "🔊"}
+                </button>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.1"
+                  value={volume}
+                  onChange={handleVolumeChange}
+                  className="w-24"
+                />
+              </div>
+              <button
+                onClick={handlePrev}
+                className="px-3 py-1 bg-gray-700 rounded"
+              >
+                ⏮ Prev
+              </button>
+
+              <button
+                onClick={() => handleSkip(-10)}
+                className="px-3 py-1 bg-gray-700 rounded"
+              >
+                ⏪ -10s
+              </button>
+
+              {/* Play/Pause Button */}
+              <button
+                onClick={togglePlayPause}
+                className="px-3 py-1 bg-gray-700 rounded"
+              >
+                {isPlaying ? "⏸" : "▶"}
+              </button>
+
+              <button
+                onClick={() => handleSkip(10)}
+                className="px-3 py-1 bg-gray-700 rounded"
+              >
+                ⏩ +10s
+              </button>
+              <button
+                onClick={handleNext}
+                className="px-3 py-1 bg-gray-700 rounded"
+              >
+                Next ⏭
+              </button>
+            </div>
+
+            {/* Playback Speed */}
+            <div className="mt-3">
+              <label className="text-white mr-2">Speed:</label>
+              <select
+                className="bg-gray-700 text-white px-2 py-1 rounded"
+                onChange={(e) => handleSpeedChange(e.target.value)}
+                value={playbackSpeed}
+              >
+                <option value="0.5">0.5x</option>
+                <option value="1">1x</option>
+                <option value="1.5">1.5x</option>
+                <option value="2">2x</option>
+              </select>
+            </div>
+
+            {/* Volume Control */}
+          </div>
+        ) : (
+          <p className="text-white">Select a video to start watching.</p>
+        )}
       </div>
     </div>
   );

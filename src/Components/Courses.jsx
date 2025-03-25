@@ -21,7 +21,7 @@ const Dashboard = () => {
 
       try {
         const response = await fetch(
-          `http://192.168.246.11:8081/api/user/start?email=${email}`,
+          `http://192.168.29.223:8081/api/user/start?email=${email}`,
           {
             method: "GET",
             headers: {

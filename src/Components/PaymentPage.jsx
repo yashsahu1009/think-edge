@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import companyLogo from "../assets/logo1.jpg";
-import paymentBanner from "../assets/large1.jpg";
 import { useNavigate } from "react-router-dom";
-import load from "../assets/successful-animated-icon-download-in-lottie-json-gif-static-svg-file-formats--complete-done-success-tick-pulsing-circle-status-pack-user-interface-icons-8403662-vmake-vmake (online-video-cutter.com).mp4"
+import loadAnimation from "../assets/successful-animated-icon-download-in-lottie-json-gif-static-svg-file-formats--complete-done-success-tick-pulsing-circle-status-pack-user-interface-icons-8403662-vmake-vmake (online-video-cutter.com).mp4";
 
 function PaymentPage() {
   const [formData, setFormData] = useState({
@@ -14,14 +13,19 @@ function PaymentPage() {
   const [errors, setErrors] = useState({});
   const [courseId, setCourseId] = useState(null);
   const [amount, setAmount] = useState(null);
-  const navigate = useNavigate();
+  const [courseTitle, setCourseTitle] = useState("");
+  const [courseImage, setCourseImage] = useState("");
+  const [courseDescription, setCourseDescription] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
+  // Load course details from localStorage
   useEffect(() => {
-    const storedCourseId = localStorage.getItem("selectedCourseId");
-    const storedAmount = localStorage.getItem("selectedCourseAmount");
-    if (storedCourseId) setCourseId(storedCourseId);
-    if (storedAmount) setAmount(storedAmount);
+    setCourseId(localStorage.getItem("selectedCourseId"));
+    setAmount(localStorage.getItem("selectedCourseAmount"));
+    setCourseTitle(localStorage.getItem("selectedCourseTitle"));
+    setCourseImage(localStorage.getItem("selectedCourseImage"));
+    setCourseDescription(localStorage.getItem("selectedCourseDescription"));
   }, []);
 
   const handleChange = (e) => {
@@ -59,7 +63,8 @@ function PaymentPage() {
     });
   };
 
-  const handlePayment = async () => {
+  const handlePayment = async (e) => {
+    e.preventDefault();
     if (!validateForm()) return;
 
     const razorpayLoaded = await loadRazorpay();
@@ -95,7 +100,7 @@ function PaymentPage() {
         const token = localStorage.getItem("authToken");
 
         try {
-          const res = await fetch("http://192.168.246.11:8081/api/createTranscation", {
+          const res = await fetch("http://192.168.29.223:8081/api/createTransaction", {
             method: "POST",
             headers: {
               Authorization: `Bearer ${token}`,
@@ -131,22 +136,16 @@ function PaymentPage() {
         <div className="col-span-2">
           <div className="space-y-5">
             <img src={companyLogo} alt="Company Logo" className="w-48 mb-3" />
-            <h1 className="text-[#0d2366] text-3xl font-semibold">
-              Sigma 5.0 | Complete Placement Prep
-            </h1>
-            <img src={paymentBanner} alt="Sigma 5.0 Banner" className="w-96 mb-4 border-2 border-white" />
-            <p className="font-bold">
-              <strong>Sigma Oct'24 Batch</strong> | Data Structures & Algorithms + Web Development
-            </p>
-            <h5 className="text-[#0d2366] text-lg font-semibold mt-4">With this course, you will get:</h5>
-            <ul className="list-disc ml-6 space-y-2">
-              <li>Complete Java Language</li>
-              <li>Complete Data Structures & Algorithms</li>
-              <li>Live practice doubt classes for DSA</li>
-              <li>Library of DSA Qs with Video Solutions of Top Companies</li>
-              <li>Complete Frontend Development (HTML, CSS, JavaScript & frameworks like Bootstrap & Tailwind)</li>
-              <li>Complete Backend Development (Node.js, Express.js)</li>
-            </ul>
+            <h2 className="text-2xl font-semibold text-gray-900">{courseTitle}</h2>
+
+            <div className="bg-white p-6 rounded-lg   max-w-md w-full">
+              {courseImage && <img src={courseImage} alt={courseTitle} className="w-full h-60 object-cover rounded-md mb-4" />}
+             
+             
+             
+               
+              <p className="text-gray-600 mt-2">{courseDescription}</p>
+            </div>
           </div>
         </div>
 
@@ -155,7 +154,7 @@ function PaymentPage() {
           <div className="grid gap-10">
             <div className="col-span-1 bg-gray-100 p-5 rounded-lg shadow-lg">
               <h5 className="text-[#0d2366] text-lg font-semibold">Payment Details</h5>
-              <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+              <form onSubmit={handlePayment} className="space-y-4">
                 <div>
                   <label className="block text-sm font-semibold">Amount</label>
                   <input
@@ -206,7 +205,7 @@ function PaymentPage() {
                   {errors.name && <small className="text-red-500">{errors.name}</small>}
                 </div>
 
-                <button onClick={handlePayment} className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                <button type="submit" className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                   Pay ₹{amount || "0"}
                 </button>
               </form>
@@ -214,27 +213,20 @@ function PaymentPage() {
           </div>
         </div>
       </div>
+
       {showModal && (
-   <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-     <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-       <video autoPlay loop className="w-32 mx-auto">
-         <source src={load} type="video/mp4" />
-       </video>
-       <h2 className="text-lg font-semibold mt-4">Payment Successful!</h2>
-       <p>Thank you for your payment. Your transaction has been recorded.</p>
-       <button 
-         onClick={() => navigate("/")} 
-         className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-       >
-         Go to Dashboard
-       </button>
-     </div>
-   </div>
- )}
-
-
-  
-
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <video autoPlay loop className="w-32 mx-auto">
+              <source src={loadAnimation} type="video/mp4" />
+            </video>
+            <h2 className="text-lg font-semibold mt-4">Payment Successful!</h2>
+            <button onClick={() => navigate("/")} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+              Go to Dashboard
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
