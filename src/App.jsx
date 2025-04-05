@@ -12,11 +12,18 @@ import SigmaCoursePage from "./Components/SigmaCoursePage";
 import PaymentPage from "./Components/PaymentPage";
 import Courses from "./Components/Courses";
 import Playlist from "./Components/Playlist";
+import Imges from "./Components/ImageSlider";
+import About from "./Components/Aboutpage"
+import Stu from "./Components/studash";
+import Trend from "./Components/trend";
+import Helo from "./Components/Help"
+ import Learn from "./Components/learn";
+ 
  
 import AdminDashboard from "./Components/AdminDashboard";
 import NewCourses from "./Components/NewCourses";
 import Dashboard from "./Components/Courses"; // ✅ Import CourseList
-
+import Certificate from "./Components/Certificate";
 function App() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
@@ -36,7 +43,7 @@ function App() {
         <Preloader /> // ✅ Show preloader while loading
       ) : (
         <>
-          {location.pathname !== "/admin" && (
+          {location.pathname !== "/admin" && location.pathname !=="/Stu" &&(
             <Navbar
               setIsLoginModalOpen={() => {
                 setIsLoginModalOpen(true);
@@ -48,18 +55,21 @@ function App() {
               }}
             />
           )}
-
+ 
           <Routes>
-            <Route path="/" element={<><Content /><Students /><Footer /></>} />
-            <Route path="/sigma-course" element={<><SigmaCoursePage /><Footer /></>} />
-            <Route path="/dsa-sheet" element={<Dsasheet />} />
+            <Route path="/" element={<> <Content /><Students /><Certificate/><Learn/> <Footer /></>} />
+            <Route path="/sigma-course" element={<><Imges/><Trend/><SigmaCoursePage /> <Footer /></>} />
+            <Route path="/dsa-sheet" element={<> <Dsasheet /></>} />
             <Route path="/new-courses" element={<NewCourses setIsLoginModalOpen={setIsLoginModalOpen}/>} />
             <Route path="/payment" element={<PaymentPage />} />
             <Route path="/courses" element={<> <Dashboard /> <Footer /> </>} />
             <Route path="/playlist" element={<Playlist />} />
-      
+            <Route path="/about" element={<About />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/login" element={<LoginModal />} />
+            <Route path="/Stu" element={<Stu />} />
+            <Route path="/help" element={<Helo />} />
+
           </Routes>
 
           {/* ✅ Modals (conditionally rendered) */}

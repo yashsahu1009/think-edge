@@ -22,13 +22,14 @@ const CourseList = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        const response = await fetch("http://192.168.29.223:8081/api/admin/AllCourse", {
+        const response = await fetch("http://192.168.29.224:8081/api/admin/AllCourse", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -42,8 +43,6 @@ const CourseList = () => {
 
         const data = await response.json();
         console.log("Fetched Courses:", data);
-
-        // Filter courses where available === true
         const availableCourses = data.filter((course) => course.available === true);
         setCourses(availableCourses);
       } catch (error) {
@@ -64,20 +63,25 @@ const CourseList = () => {
       return;
     }
 
-    // Store course details in localStorage
     localStorage.setItem("selectedCourseId", course.courseId);
     localStorage.setItem("selectedCourseAmount", course.price);
     localStorage.setItem("selectedCourseTitle", course.title);
     localStorage.setItem("selectedCourseImage", `data:${course.imageType};base64,${course.imageData}`);
     localStorage.setItem("selectedCourseDescription", course.description);
-
-    // Navigate to the payment page
     navigate(`/payment`);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-purple-200 flex flex-col items-center py-10">
       <h1 className="text-4xl font-extrabold text-gray-800 mb-8">Explore Our Courses</h1>
+      
+      <input
+        type="text"
+        placeholder="Search courses..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="p-3 mb-6 w-3/4 max-w-md border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+      />
 
       {loading ? (
         <div className="flex justify-center items-center h-48">
@@ -85,7 +89,7 @@ const CourseList = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
-          {courses.map((course) => (
+          {courses.filter(course => course.title.toLowerCase().includes(searchTerm.toLowerCase())).map((course) => (
             <div
               key={course.id}
               className="w-80 h-[500px] bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl p-5 flex flex-col"
@@ -100,11 +104,8 @@ const CourseList = () => {
               )}
 
               <h3 className="text-xl font-bold text-gray-900 mt-4">{course.title}</h3>
-
               <p className="text-gray-600 text-sm mt-2 line-clamp-3 flex-grow">{course.description}</p>
-
               <p className="text-blue-600 font-semibold text-lg mt-2">₹{course.price}</p>
-
               <button
                 onClick={() => handleEnroll(course)}
                 className="mt-auto w-full bg-blue-600 text-white py-2 rounded-lg font-semibold shadow-md transition-all hover:bg-blue-700 hover:shadow-lg active:scale-95"
@@ -116,7 +117,6 @@ const CourseList = () => {
         </div>
       )}
 
-      {/* Show modal if the user is not logged in */}
       {isModalOpen && <Modal message="Please log in to enroll in a course." onClose={() => setIsModalOpen(false)} />}
     </div>
   );

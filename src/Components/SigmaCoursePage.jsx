@@ -1,12 +1,13 @@
-import React from 'react';
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import left from "../assets/banner_top_image.png";
 import { motion } from "framer-motion";
- 
+
 const CourseCard = ({ title, color, features, duration, startDate }) => (
-  
   <div className="w-full md:w-1/2 lg:w-1/3 p-4">
-    <div className={`bg-${color}-500 text-white rounded-lg shadow-lg overflow-hidden`}>
+    <div
+      className={`bg-${color}-500 text-white rounded-lg shadow-lg overflow-hidden`}
+    >
       <div className={`bg-${color}-600 p-4`}>
         <h3 className="text-center text-xl font-semibold">{title}</h3>
       </div>
@@ -14,8 +15,19 @@ const CourseCard = ({ title, color, features, duration, startDate }) => (
         <ul className="space-y-2">
           {features.map((feature, index) => (
             <li key={index} className="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-white mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4 text-white mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
               {feature}
             </li>
@@ -24,14 +36,17 @@ const CourseCard = ({ title, color, features, duration, startDate }) => (
       </div>
       <div className="bg-gray-100 p-4">
         <div className="flex justify-between">
-          <div><strong>Duration:</strong> {duration}</div>
-          <div><strong>Start Date:</strong> {startDate}</div>
+          <div>
+            <strong>Duration:</strong> {duration}
+          </div>
+          <div>
+            <strong>Start Date:</strong> {startDate}
+          </div>
         </div>
       </div>
     </div>
   </div>
 );
- 
 
 const FeatureBox = ({ title, features }) => (
   <div className="w-full md:w-1/3 p-4">
@@ -40,8 +55,19 @@ const FeatureBox = ({ title, features }) => (
       <ul className="space-y-2">
         {features.map((feature, index) => (
           <li key={index} className="flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4 text-green-500 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 13l4 4L19 7"
+              />
             </svg>
             {feature}
           </li>
@@ -124,203 +150,111 @@ const CompaniesSection = () => {
     {
       src: "https://lwfiles.mycourse.app/62a6cd5e1e9e2fbf212d608d-public/9a47085894be9870158c9ad4e23c1a24.png",
       alt: "Airtel",
-    }
-   
+    },
+
     // Add other companies here...
   ];
 
-   
-   
   return (
     <section className="py-16 text-center bg-gray-100">
       <h2 className="font-semibold text-4xl">
         Thousands of students achieved their{" "}
         <span className="text-indigo-600">dream job at</span>
       </h2>
-      
-   
-      <div className="overflow-hidden w-full relative mt-8">
-  <motion.div
-    className="flex space-x-6"
-    animate={{ x: ["0%", "-100%"] }} // Moves from right to left in a loop
-    transition={{
-      repeat: Infinity,
-      ease: "linear",
-      duration: 10,
-    }}
-  >
-    {[...companies, ...companies].map((company, index) => (
-      <div
-        key={index}
-        className="w-56 h-40 bg-white shadow-lg rounded-2xl flex flex-col justify-center items-center p-4 border border-gray-200"
-      >
-        <div className="w-40 h-24 flex justify-center items-center">
-          <img
-            src={company.src}
-            alt={company.alt}
-            className="max-w-full max-h-full object-contain"
-          />
-        </div>
-        <h3 className="mt-2 text-lg font-semibold text-gray-700">{company.alt}</h3>
-      </div>
-    ))}
-  </motion.div>
-</div>
 
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
+      <div className="overflow-hidden w-full relative mt-8">
+        <motion.div
+          className="flex space-x-6"
+          animate={{ x: ["0%", "-100%"] }} // Moves from right to left in a loop
+          transition={{
+            repeat: Infinity,
+            ease: "linear",
+            duration: 10,
+          }}
+        >
+          {[...companies, ...companies].map((company, index) => (
+            <div
+              key={index}
+              className="w-56 h-40 bg-white shadow-lg rounded-2xl flex flex-col justify-center items-center p-4 border border-gray-200"
+            >
+              <div className="w-40 h-24 flex justify-center items-center">
+                <img
+                  src={company.src}
+                  alt={company.alt}
+                  className="max-w-full max-h-full object-contain"
+                />
+              </div>
+              <h3 className="mt-2 text-lg font-semibold text-gray-700">
+                {company.alt}
+              </h3>
+            </div>
+          ))}
+        </motion.div>
+      </div>
     </section>
   );
 };
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
- 
-   
-   
-   
-   
-   
-   
-   
-   
-   
-
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-
-
-
-   
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 
 const App = () => {
   const navigate = useNavigate();
   const courseFeaturesAlpha = [
-    'Complete DSA Batch',
-    'Java Language',
-    'Data Structures & Algorithms',
-    'Advanced DSA',
-    '50 Live Practice Sessions',
-    'Quant & Aptitude Preparation',
-    'Individual Doubt Support',
-    'Certificate of Completion',
+    "Complete DSA Batch",
+    "Java Language",
+    "Data Structures & Algorithms",
+    "Advanced DSA",
+    "50 Live Practice Sessions",
+    "Quant & Aptitude Preparation",
+    "Individual Doubt Support",
+    "Certificate of Completion",
   ];
 
   const courseFeaturesSigma = [
-    'Complete DSA + Web Development',
-    'Everything in Alpha Plus 4.0',
-    'Project Development',
-    'MERN Stack',
-    'Frontend & React',
-    'Backend & Database',
-    'Multiple Project Implementations',
-    '2 Certificates of Completion',
+    "Complete DSA + Web Development",
+    "Everything in Alpha Plus 4.0",
+    "Project Development",
+    "MERN Stack",
+    "Frontend & React",
+    "Backend & Database",
+    "Multiple Project Implementations",
+    "2 Certificates of Completion",
   ];
 
   const featuresData = [
     {
-      title: 'Data Structures & Algorithms',
+      title: "Data Structures & Algorithms",
       features: [
-        'Java Language',
-        'Data Structures & Algorithms',
-        'Advanced DSA',
-        '50 Live Practice Sessions with MAANG Engineers',
-        'Individual doubt support: TA',
-        'Certificate of Completion',
-        'Duration: 4 months',
+        "Java Language",
+        "Data Structures & Algorithms",
+        "Advanced DSA",
+        "50 Live Practice Sessions with MAANG Engineers",
+        "Individual doubt support: TA",
+        "Certificate of Completion",
+        "Duration: 4 months",
       ],
     },
     {
-      title: 'Full Stack Web Development',
+      title: "Full Stack Web Development",
       features: [
-        'Complete MERN Stack',
-        'Frontend & React',
-        'Backend & Database',
-        'Git & Github',
-        'Multiple Industry Grade Projects',
-        'Individual doubt support: TA',
-        'Certificate of Completion',
-        'Duration: 4.5 Months',
+        "Complete MERN Stack",
+        "Frontend & React",
+        "Backend & Database",
+        "Git & Github",
+        "Multiple Industry Grade Projects",
+        "Individual doubt support: TA",
+        "Certificate of Completion",
+        "Duration: 4.5 Months",
       ],
     },
     {
-      title: 'Quant & Aptitude Preparation',
+      title: "Quant & Aptitude Preparation",
       features: [
-        'Data Structures & Algorithms',
-        'Advanced DSA',
-        '50 Live Practice Sessions with MAANG Engineers',
-        'Quant & Aptitude Practice',
-        'Individual doubt support: TA',
-        'Certificate of Completion',
-        'Duration: 4 months',
+        "Data Structures & Algorithms",
+        "Advanced DSA",
+        "50 Live Practice Sessions with MAANG Engineers",
+        "Quant & Aptitude Practice",
+        "Individual doubt support: TA",
+        "Certificate of Completion",
+        "Duration: 4 months",
       ],
     },
   ];
@@ -331,37 +265,49 @@ const App = () => {
         <div className="flex flex-wrap items-center justify-between">
           <div className="w-full md:w-1/2 text-center md:text-left">
             <h1 className="text-4xl font-bold leading-tight">
-              <span className="text-blue-500">Sigma 5.0 :</span> Complete Placement Preparation!
+              <span className="text-blue-500"> java :</span> Complete Placement
+              Preparation!
             </h1>
             <ul className="mt-6 space-y-2 text-lg text-gray-700">
-              <li><i className="bi bi-camera-video"></i> DSA + Development + Quant-Aptitude</li>
-              <li><i className="bi bi-people"></i> Individual Doubt Solving TAs & Community</li>
-              <li><i className="bi bi-journal"></i> Access to PYQs of Top Companies</li>
+              <li>
+                <i className="bi bi-camera-video"></i> DSA + Development +
+                Quant-Aptitude
+              </li>
+              <li>
+                <i className="bi bi-people"></i> Individual Doubt Solving TAs &
+                Community
+              </li>
+              <li>
+                <i className="bi bi-journal"></i> Access to PYQs of Top
+                Companies
+              </li>
             </ul>
-            
-         <button className="mt-6 bg-blue-500 text-white px-6 py-2 rounded-full text-lg hover:bg-blue-600"  onClick={() => navigate("/payment")}>
-                       Enroll Now ➤
-                     </button>
-     
-     
-     
-     
+
+            <button
+              className="mt-6 bg-blue-500 text-white px-6 py-2 rounded-full text-lg hover:bg-blue-600"
+              onClick={() => navigate("/payment")}
+            >
+              Enroll Now ➤
+            </button>
           </div>
           <div className="w-full md:w-1/2 mt-8 md:mt-0">
             <img src={left} alt="Profile" className="w-full h-auto" />
           </div>
         </div>
       </div>
-      
 
       {/* Course Comparison Section */}
-      <div className="bg-gray-100 mt-10 p-10 rounded-lg shadow-lg">
-        <h1 className="text-center text-2xl font-semibold mb-6">Course Comparison</h1>
-        <div className="grid md:grid-cols-2 gap-6">
+      <div className="bg-gradient-to-r from-blue-50 to-green-50 mt-10 p-10 rounded-xl shadow-xl">
+        <h1 className="text-center text-3xl font-bold text-gray-800 mb-8">
+          📚 Course Comparison
+        </h1>
+        <div className="grid md:grid-cols-2 gap-8">
           {/* Alpha Plus 4.0 Card */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="bg-blue-600 text-white text-center py-2 rounded-t-lg font-bold text-lg">Alpha Plus 4.0</h3>
-            <ul className="mt-4 space-y-2 text-gray-700">
+          <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105">
+            <h3 className="bg-blue-600 text-white text-center py-3 rounded-t-2xl font-bold text-xl">
+              Java
+            </h3>
+            <ul className="mt-5 space-y-3 text-gray-700 text-lg">
               <li>✅ Complete DSA Batch</li>
               <li>✅ Java Language</li>
               <li>✅ Data Structures & Algorithms</li>
@@ -371,16 +317,22 @@ const App = () => {
               <li>✅ Individual Doubt Support</li>
               <li>✅ Certificate of Completion</li>
             </ul>
-            <div className="flex justify-between mt-4 text-sm text-gray-600">
-              <span><strong>Duration:</strong> 4 months</span>
-              <span><strong>Start Date:</strong> 28th Oct, 2024</span>
+            <div className="flex justify-between mt-6 text-md text-gray-600 border-t pt-4">
+              <span>
+                <strong>⏳ Duration:</strong> 4 months
+              </span>
+              <span>
+                <strong>📅 Start Date:</strong> Updated soon
+              </span>
             </div>
           </div>
 
           {/* Sigma 5.0 Card */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="bg-green-600 text-white text-center py-2 rounded-t-lg font-bold text-lg">Sigma 5.0</h3>
-            <ul className="mt-4 space-y-2 text-gray-700">
+          <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105">
+            <h3 className="bg-green-600 text-white text-center py-3 rounded-t-2xl font-bold text-xl">
+              Java with DSA & Development
+            </h3>
+            <ul className="mt-5 space-y-3 text-gray-700 text-lg">
               <li>✅ Complete DSA + Web Development</li>
               <li>✅ Modern JavaScript</li>
               <li>✅ React + Node.js</li>
@@ -389,21 +341,32 @@ const App = () => {
               <li>✅ Mock Interviews & Doubt Solving</li>
               <li>✅ Certification</li>
             </ul>
-            <div className="flex justify-between mt-4 text-sm text-gray-600">
-              <span><strong>Duration:</strong> 5 months</span>
-              <span><strong>Start Date:</strong> 15th Nov, 2024</span>
+            <div className="flex justify-between mt-6 text-md text-gray-600 border-t pt-4">
+              <span>
+                <strong>⏳ Duration:</strong> 5 months
+              </span>
+              <span>
+                <strong>📅 Start Date:</strong>Updated soon
+              </span>
             </div>
           </div>
         </div>
-      </div>
+      </div> 
 
       <CompaniesSection />
 
       <div className="container mx-auto px-4 py-12 bg-gray-50">
-        <h2 className="text-3xl font-bold text-center mb-8">What will you <span className="text-blue-500">learn</span> in Sigma 5.0?</h2>
+        <h2 className="text-3xl font-bold text-center mb-8">
+          What will you <span className="text-blue-500">learn</span> Java with
+          DSA & Development
+        </h2>
         <div className="flex flex-wrap ">
           {featuresData.map((feature, index) => (
-            <FeatureBox key={index} title={feature.title} features={feature.features} />
+            <FeatureBox
+              key={index}
+              title={feature.title}
+              features={feature.features}
+            />
           ))}
         </div>
       </div>

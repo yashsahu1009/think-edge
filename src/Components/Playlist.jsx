@@ -39,7 +39,7 @@ const CoursePage = () => {
         }
 
         const response = await fetch(
-          `http://192.168.29.223:8081/api/showVideo?courseId=${courseId}`,
+          `http://192.168.29.224:8081/api/showVideo?courseId=${courseId}`,
           {
             method: "GET",
             headers: {

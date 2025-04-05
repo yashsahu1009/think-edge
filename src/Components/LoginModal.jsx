@@ -32,7 +32,7 @@ const LoginModal = ({ openModal, setOpenModal, setIsSignUpModalOpen, setIsAuthen
     const payload = { email, password };
 
     try {
-      const response = await fetch("http://192.168.29.223:8081/api/auth/login", {
+      const response = await fetch("http://192.168.29.224:8081/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -64,7 +64,7 @@ const LoginModal = ({ openModal, setOpenModal, setIsSignUpModalOpen, setIsAuthen
     setError("");
 
     try {
-      const response = await fetch("http://192.168.29.223:8081/api/auth/forgot-password", {
+      const response = await fetch("http://192.168.29.224:8081/api/auth/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: forgotEmail }),

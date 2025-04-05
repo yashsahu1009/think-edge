@@ -8,6 +8,7 @@ const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [courses, setCourses] = useState([]);
   const [error, setError] = useState(null);
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -20,8 +21,24 @@ const Dashboard = () => {
       }
 
       try {
+        // Fetch username
+        const usernameResponse = await fetch(
+          `http://192.168.29.224:8081/api/auth/username?email=${email}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!usernameResponse.ok) throw new Error("Failed to fetch username");
+        const usernameData = await usernameResponse.json();
+        setUsername(usernameData.username);
+
+        // Fetch user courses
         const response = await fetch(
-          `http://192.168.29.223:8081/api/user/start?email=${email}`,
+          `http://192.168.29.224:8081/api/user/start?email=${email}`,
           {
             method: "GET",
             headers: {
@@ -40,9 +57,7 @@ const Dashboard = () => {
 
         const userData = await response.json();
         setUser(userData);
-
         setCourses(Array.isArray(userData) ? userData : []);
-
       } catch (error) {
         console.error("Error fetching data:", error);
         setError("Failed to load data. Please try again.");
@@ -67,7 +82,9 @@ const Dashboard = () => {
         </motion.div>
       ) : (
         <>
-          <h2 className="text-2xl font-bold text-center mb-6">Welcome! 🎉</h2>
+          <h2 className="text-2xl font-bold text-center mb-6">
+            Welcome {username && `${username}`} 🎉
+          </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 w-full max-w-[1300px] mx-auto">
             {courses.length > 0 ? (

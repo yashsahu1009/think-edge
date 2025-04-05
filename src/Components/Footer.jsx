@@ -1,5 +1,5 @@
 import React from "react";
-import logo1 from "../assets/logo1.jpg";
+import logo1 from "../assets/logo1-removebg-preview (2).png";
 import { 
   FaFacebookF, FaTwitter, FaYoutube, FaInstagram, 
   FaLinkedin, FaEnvelope, FaClock, FaMapMarkerAlt, FaPhone 
