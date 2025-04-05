@@ -8,7 +8,7 @@ const MotivationalQuote = () => {
                 {/* Text Section */}
                 <div className="flex-1 text-center md:text-left animate__animated animate__fadeIn animate__delay-1s">
                     <div className="bg-gradient-to-r from-yellow-400 to-red-500 p-10 rounded-lg text-white text-3xl md:text-4xl lg:text-5xl font-extrabold max-w-xl mx-auto shadow-lg">
-                        "Success is not the key to happiness. Happiness is the key to success. Keep learning and coding."
+                        "Success is not the key to happiness. Happiness is the key to success. Keep learning and Keep coding."
                     </div>
                 </div>
 
