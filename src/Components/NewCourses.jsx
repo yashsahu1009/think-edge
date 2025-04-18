@@ -28,13 +28,13 @@ const CourseList = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const token = localStorage.getItem("authToken");
-        const response = await fetch("http://192.168.29.224:8081/api/admin/AllCourse", {
+       
+        const response = await fetch("http://thinkedge.ap-south-1.elasticbeanstalk.com/api/admin/AllCourse", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+            
+          }, 
         });
 
         if (!response.ok) {
