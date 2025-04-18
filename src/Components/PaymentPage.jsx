@@ -1,3 +1,5 @@
+ // PaymentPage.jsx
+
 import React, { useState, useEffect } from "react";
 import companyLogo from "../assets/logo1.jpg";
 import paymentBanner from "../assets/large1.jpg";
@@ -115,7 +117,7 @@ function PaymentPage() {
           if (res.ok) {
             setShowModal(true);
             toast.success("Payment Successful!");
-            generatePDF();
+            setTimeout(generatePDF, 300); // Delay to ensure DOM update
           } else {
             alert(`Transaction failed: ${data.message}`);
           }
@@ -133,56 +135,28 @@ function PaymentPage() {
     rzp.open();
   };
 
-  
-  
-
-  
-  
   const generatePDF = () => {
     const input = document.getElementById("bill-template");
-  
-    // Temporarily make the bill visible for rendering
+    if (!input) return;
+
     input.style.display = "block";
-    input.style.position = "relative"; // Make sure it's positioned on the page
-  
-    const pdf = new jsPDF("p",); // A4 size (Portrait)
-  
-    // Adjust scale and margins if needed
-    const margin = 10; // You can adjust this to increase/decrease the margin
-    const scaleFactor = 1; // Adjust to scale content
-  
-    // Use setTimeout to ensure the content has been rendered before generating the PDF
+    input.style.position = "relative";
+
     setTimeout(() => {
-      html2canvas(input, { scale: scaleFactor }).then((canvas) => {
+      html2canvas(input, { scale: 2 }).then((canvas) => {
         const imgData = canvas.toDataURL("image/png");
-  
-        // Adjust the image position and size in the PDF
-        pdf.addImage(imgData, "PNG", margin, margin, 190, 200); // Adjust 190 width and 277 height for A4
-  
-        // Save the PDF with the appropriate name
+        const pdf = new jsPDF("p", "mm", "a4");
+        const pdfWidth = 210;
+        const pageHeight = 297;
+        const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+
+        pdf.addImage(imgData, "PNG", 0, 10, pdfWidth, imgHeight);
         pdf.save(`ThinkEdge_Receipt_${Date.now()}.pdf`);
-  
-        // Hide the bill template again after generating the PDF
+
         input.style.display = "none";
       });
-    }, 200); // Slight delay to ensure the template is rendered
+    }, 200);
   };
-  
-
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-  
-  
-  
-  
 
   return (
     <div className="container mx-auto py-10">
@@ -192,11 +166,7 @@ function PaymentPage() {
           <img src={companyLogo} alt="Company Logo" className="w-48 mb-3" />
           <h2 className="text-2xl font-semibold text-gray-900">{course.title}</h2>
           <div className="bg-white p-6 rounded-lg max-w-md w-full">
-            <img
-              src={course.image}
-              alt="Course"
-              className="w-full h-60 object-cover rounded-md mb-4"
-            />
+            <img src={course.image} alt="Course" className="w-full h-60 object-cover rounded-md mb-4" />
             <p className="text-gray-600 mt-2">{course.description}</p>
           </div>
         </div>
@@ -208,56 +178,25 @@ function PaymentPage() {
               <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
                 <div>
                   <label className="block text-sm font-semibold">Amount</label>
-                  <input
-                    type="text"
-                    value={`₹${course.amount || "0"}`}
-                    readOnly
-                    className="w-full p-3 border border-gray-300 rounded-lg mt-2"
-                  />
+                  <input type="text" value={`₹${course.amount || "0"}`} readOnly className="w-full p-3 border border-gray-300 rounded-lg mt-2" />
                   <small className="text-gray-500">18% GST included</small>
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-sm font-semibold">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="Enter your email"
-                    className="w-full p-3 border border-gray-300 rounded-lg mt-2"
-                  />
+                  <input type="email" id="email" value={formData.email} onChange={handleChange} placeholder="Enter your email" className="w-full p-3 border border-gray-300 rounded-lg mt-2" />
                   {errors.email && <small className="text-red-500">{errors.email}</small>}
                 </div>
                 <div>
                   <label htmlFor="mobile" className="block text-sm font-semibold">Phone</label>
-                  <input
-                    type="text"
-                    id="mobile"
-                    value={formData.mobile}
-                    onChange={handleChange}
-                    placeholder="Enter your phone"
-                    className="w-full p-3 border border-gray-300 rounded-lg mt-2"
-                  />
+                  <input type="text" id="mobile" value={formData.mobile} onChange={handleChange} placeholder="Enter your phone" className="w-full p-3 border border-gray-300 rounded-lg mt-2" />
                   {errors.mobile && <small className="text-red-500">{errors.mobile}</small>}
                 </div>
                 <div>
                   <label htmlFor="name" className="block text-sm font-semibold">Full Name</label>
-                  <input
-                    type="text"
-                    id="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Enter your full name"
-                    className="w-full p-3 border border-gray-300 rounded-lg mt-2"
-                  />
+                  <input type="text" id="name" value={formData.name} onChange={handleChange} placeholder="Enter your full name" className="w-full p-3 border border-gray-300 rounded-lg mt-2" />
                   {errors.name && <small className="text-red-500">{errors.name}</small>}
                 </div>
-                <button
-                  onClick={handlePayment}
-                  className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                >
-                  Pay ₹{course.amount || "0"}
-                </button>
+                <button onClick={handlePayment} className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Pay ₹{course.amount || "0"}</button>
               </form>
             </div>
           </div>
@@ -273,27 +212,17 @@ function PaymentPage() {
             <h2 className="text-lg font-semibold mt-4">Payment Successful!</h2>
             <p>Thank you for your payment. Your transaction has been recorded.</p>
             <div className="flex flex-col sm:flex-row justify-center gap-4 mt-4">
-              <button
-                onClick={generatePDF}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-              >
-                Download Bill
-              </button>
-              <button
-                onClick={() => navigate("/")}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-              >
-                Go to Dashboard
-              </button>
+              <button onClick={generatePDF} className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Download Bill</button>
+              <button onClick={() => navigate("/")} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Go to Dashboard</button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Hidden Bill Template for PDF generation */}
+      {/* Hidden Bill Template for PDF */}
       <div
         id="bill-template"
-        className="bg-white p-6 w-[50%]  text-sm text-black border border-gray-300 shadow-lg rounded-lg"
+        className="bg-white p-6 w-[50%] text-sm text-black border border-gray-300 shadow-lg rounded-lg"
         style={{ display: "none", position: "absolute", top: "-9999px", left: "-9999px" }}
       >
         <div className="text-center mb-6">
