@@ -11,7 +11,7 @@ function SignUpModal({ openModal, setOpenModal, setIsLoginModalOpen }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(""); // State to show messages
 
-  const API_URL = "https://thinkedge.ap-south-1.elasticbeanstalk.com/api/auth/singup";
+  const API_URL = "http://thinkedge.ap-south-1.elasticbeanstalk.com/api/auth/singup";
 
   const handleChange = (e) => {
     const { id, value } = e.target;

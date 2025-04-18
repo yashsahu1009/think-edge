@@ -59,7 +59,7 @@ function PaymentPage() {
         resolve(true);
       } else {
         const script = document.createElement("script");
-        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.src = "http://checkout.razorpay.com/v1/checkout.js";
         script.onload = () => resolve(true);
         script.onerror = () => resolve(false);
         document.body.appendChild(script);
@@ -102,7 +102,7 @@ function PaymentPage() {
 
         try {
           const res = await fetch(
-            "https://thinkedge.ap-south-1.elasticbeanstalk.com/api/createTranscation",
+            "http://thinkedge.ap-south-1.elasticbeanstalk.com/api/createTranscation",
             {
               method: "POST",
               headers: {

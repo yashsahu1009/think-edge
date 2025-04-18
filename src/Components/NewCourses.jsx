@@ -29,7 +29,7 @@ const CourseList = () => {
     const fetchCourses = async () => {
       try {
        
-        const response = await fetch("https://thinkedge.ap-south-1.elasticbeanstalk.com/api/admin/AllCourse", {
+        const response = await fetch("http://thinkedge.ap-south-1.elasticbeanstalk.com/api/admin/AllCourse", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
