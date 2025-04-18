@@ -23,7 +23,7 @@ const Dashboard = () => {
       try {
         // Fetch username
         const usernameResponse = await fetch(
-          `http://thinkedge.ap-south-1.elasticbeanstalk.com/api/auth/username?email=${email}`,
+          `https://thinkedge.ap-south-1.elasticbeanstalk.com/api/auth/username?email=${email}`,
           {
             method: "GET",
             headers: {
@@ -38,7 +38,7 @@ const Dashboard = () => {
 
         // Fetch user courses
         const response = await fetch(
-          `http://thinkedge.ap-south-1.elasticbeanstalk.com/api/user/start?email=${email}`,
+          `https://thinkedge.ap-south-1.elasticbeanstalk.com/api/user/start?email=${email}`,
           {
             method: "GET",
             headers: {

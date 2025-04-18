@@ -32,7 +32,7 @@ const LoginModal = ({ openModal, setOpenModal, setIsSignUpModalOpen, setIsAuthen
     const payload = { email, password };
 
     try {
-      const response = await fetch("http://thinkedge.ap-south-1.elasticbeanstalk.com/api/auth/login", {
+      const response = await fetch("https://thinkedge.ap-south-1.elasticbeanstalk.com/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -64,7 +64,7 @@ const LoginModal = ({ openModal, setOpenModal, setIsSignUpModalOpen, setIsAuthen
     setError("");
 
     try {
-      const response = await fetch("http://thinkedge.ap-south-1.elasticbeanstalk.com/api/auth/forgot-password", {
+      const response = await fetch("https://thinkedge.ap-south-1.elasticbeanstalk.com/api/auth/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: forgotEmail }),

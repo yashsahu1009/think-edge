@@ -39,7 +39,7 @@ const CoursePage = () => {
         }
 
         const response = await fetch(
-          `http://thinkedge.ap-south-1.elasticbeanstalk.com/api/showVideo?courseId=${courseId}`,
+          `https://thinkedge.ap-south-1.elasticbeanstalk.com/api/showVideo?courseId=${courseId}`,
           {
             method: "GET",
             headers: {

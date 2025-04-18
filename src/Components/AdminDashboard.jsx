@@ -6,11 +6,11 @@ import logo from "../assets/favicon-3.png";
 import loadingGif from "../assets/loading.gif";
 
 
-const API_BASE_URL = "http://thinkedge.ap-south-1.elasticbeanstalk.com/api/admin/AllCourse";
-const ADD_COURSE_URL = "http://thinkedge.ap-south-1.elasticbeanstalk.com/api/admin/addcourse";
-const DELETE_COURSE_URL = "http://thinkedge.ap-south-1.elasticbeanstalk.com/api/admin/removeCourse";
-const EDIT_COURSE_URL = "http://thinkedge.ap-south-1.elasticbeanstalk.com/api/admin/updateCourseWithoutimage";
-const VIDEO_COURSE_URL = "http://thinkedge.ap-south-1.elasticbeanstalk.com/api/addVideo";
+const API_BASE_URL = "https://thinkedge.ap-south-1.elasticbeanstalk.com/api/admin/AllCourse";
+const ADD_COURSE_URL = "https://thinkedge.ap-south-1.elasticbeanstalk.com/api/admin/addcourse";
+const DELETE_COURSE_URL = "https://thinkedge.ap-south-1.elasticbeanstalk.com/api/admin/removeCourse";
+const EDIT_COURSE_URL = "https://thinkedge.ap-south-1.elasticbeanstalk.com/api/admin/updateCourseWithoutimage";
+const VIDEO_COURSE_URL = "https://thinkedge.ap-south-1.elasticbeanstalk.com/api/addVideo";
 
 const AdminDashboard = () => {
   const [darkMode, setDarkMode] = useState(false);

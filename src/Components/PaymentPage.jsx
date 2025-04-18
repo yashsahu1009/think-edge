@@ -102,7 +102,7 @@ function PaymentPage() {
 
         try {
           const res = await fetch(
-            "http://thinkedge.ap-south-1.elasticbeanstalk.com/api/createTranscation",
+            "https://thinkedge.ap-south-1.elasticbeanstalk.com/api/createTranscation",
             {
               method: "POST",
               headers: {
